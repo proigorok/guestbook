@@ -1,0 +1,52 @@
+<?php
+$title = 'Records';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<?php
+$form = $this->form;
+$form->setAttribute('records', $this->url('records', array('action' => '1')));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formCollection($form);
+echo $this->form()->closeTag();
+$sortForm = $this->sortForm;
+$sortForm->setAttribute('records', $this->url('records', array('action' => '1')));
+$sortForm->prepare();?>
+<hr SIZE="5">
+<?php
+echo $this->form()->openTag($sortForm);
+echo $this->formRow($sortForm->get('field')).$this->formRow($sortForm->get('order'));?>
+<input type="submit" value="Go">
+<?php
+echo $this->form()->closeTag();
+?>
+
+<table class="table" border="1">
+<tr>
+    <th>Date</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Homepage</th>
+    <th>Text</th>
+    <th>Image</th>
+    <th>File</th>
+
+</tr>
+<?php foreach ($records as $record) : ?>
+<tr>
+    <td><?php echo $this->escapeHtml($record->date);?></td>
+    <td><?php echo $this->escapeHtml($record->name);?></td>
+    <td><?php echo $this->escapeHtml($record->email);?></td>
+    <td><?php echo $this->escapeHtml($record->homepage);?></td>
+    <td><?php echo $this->escapeHtml($record->text);?></td>
+    <td><IMG SRC="/files/<?php echo preg_replace('(.*/)','',$this->escapeHtml($record->image))?>"WIDTH="64" HEIGHT="64"></td>
+    <td><?php if ($record->file):?> <a href="http://localhost/guest-book/public/files/<?php echo preg_replace('(.*/)','',$this->escapeHtml($record->file))?>" title="File">Your file</a><?php endif;?></td>
+</tr>
+
+<?php endforeach;?>
+
+</table><div align=center>
+<?php echo $this->paginationControl($records, 'Sliding', 'records/records/paginator.phtml')  ?></div>
